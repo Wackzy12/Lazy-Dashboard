@@ -1,11 +1,24 @@
+import { useEffect } from 'react'
+import { supabase } from './services/supabase'
+
 function App() {
+  useEffect(() => {
+    async function testConnection() {
+      const { data, error } =
+        await supabase.auth.getSession()
+
+      console.log(data)
+      console.log(error)
+    }
+
+    testConnection()
+  }, [])
+
   return (
-    <div className="flex min-h-screen items-center justify-center">
-      <h1 className="text-5xl font-bold text-blue-400">
-        Lazy Dashboard
-        </h1>
+    <div className="p-10 text-white">
+      Supabase Connected
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
