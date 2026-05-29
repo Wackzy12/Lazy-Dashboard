@@ -12,10 +12,11 @@ export default function Login() {
   const [error, setError] = useState(null)
 
   const handleLogin = async (e) => {
-    toast.success("Login successful!")
+    
     e.preventDefault()
     setLoading(true)
     setError(null)
+
 
     const { error } =
       await supabase.auth.signInWithPassword({
@@ -27,8 +28,11 @@ export default function Login() {
 
     if (error) {
       setError(error.message)
+      toast.error("Login failed: " + error.message)
       return
     }
+
+    toast.success("Login successful!")
 
     navigate("/")
   }
