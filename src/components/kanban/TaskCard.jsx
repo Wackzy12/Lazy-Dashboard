@@ -1,7 +1,11 @@
 import { useDraggable } from "@dnd-kit/core"
 import { CSS } from "@dnd-kit/utilities"
 
-export default function TaskCard({ task }) {
+export default function TaskCard({
+  task,
+  onEdit,
+  onDelete
+}) {
   const { attributes, listeners, setNodeRef, transform } =
     useDraggable({
       id: task.id,
@@ -32,6 +36,31 @@ export default function TaskCard({ task }) {
       <div className="flex justify-between mt-3 text-xs text-slate-400">
         <span>{task.priority}</span>
         <span>{task.status}</span>
+      </div>
+
+      {/* ACTION BUTTONS */}
+      <div className="flex gap-2 mt-3">
+        <button
+          onClick={(e) => {
+            e.stopPropagation()
+            onEdit(task.id, task)
+            toast.success("Task updated")
+          }}
+          className="text-sm bg-slate-700 hover:bg-slate-600 px-3 py-1 rounded"
+        >
+          Edit
+        </button>
+
+        <button
+          onClick={(e) => {
+            e.stopPropagation()
+            onDelete(task.id)
+            toast.success("Task deleted")
+          }}
+          className="text-sm bg-red-600 hover:bg-red-700 px-3 py-1 rounded"
+        >
+          Delete
+        </button>
       </div>
     </div>
   )

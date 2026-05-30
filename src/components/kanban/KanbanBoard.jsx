@@ -4,6 +4,7 @@ import DndContextWrapper from "./DndContextWrapper"
 export default function KanbanBoard({
   tasks,
   onUpdate,
+  onDelete,
 }) {
   const todo = tasks.filter(t => t.status === "todo")
   const inProgress = tasks.filter(t => t.status === "in_progress")
@@ -29,18 +30,24 @@ export default function KanbanBoard({
           id="todo"
           title="To Do"
           tasks={todo}
+          onUpdate={onUpdate}
+          onDelete={onDelete}
         />
 
         <KanbanColumn
           id="in_progress"
           title="In Progress"
-          tasks={inProgress}
+          tasks={inProgress}  
+          onUpdate={onUpdate}
+          onDelete={onDelete}
         />
 
         <KanbanColumn
           id="done"
           title="Done"
           tasks={done}
+          onUpdate={onUpdate}
+          onDelete={onDelete}
         />
       </div>
     </DndContextWrapper>
