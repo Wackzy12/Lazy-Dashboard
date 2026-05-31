@@ -7,6 +7,7 @@ export default function KanbanColumn({
   tasks,
   onUpdate,
   onDelete,
+  onEdit,
 }) {
   const { setNodeRef } = useDroppable({
     id,
@@ -23,9 +24,19 @@ export default function KanbanColumn({
       </h2>
       
       {tasks.length === 0 && (
-        <p className="text-sm text-slate-500">
-          No tasks yet
-        </p>
+        <div className="text-center py-10">
+          <div className="text-4xl mb-3">
+            📭
+          </div>
+
+          <h3 className="font-medium">
+            No Tasks
+          </h3>
+
+          <p className="text-slate-400 text-sm">
+            Create your first task.
+          </p>
+        </div>
       )}
 
       <div className="space-y-3">
@@ -35,6 +46,7 @@ export default function KanbanColumn({
           task={task} 
           onUpdate={onUpdate}
           onDelete={onDelete}
+          onEdit={onEdit}
           />
         ))}
       </div>

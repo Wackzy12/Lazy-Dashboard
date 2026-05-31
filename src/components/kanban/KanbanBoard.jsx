@@ -5,10 +5,41 @@ export default function KanbanBoard({
   tasks,
   onUpdate,
   onDelete,
+  onEdit,
+  filter,
+  search,
 }) {
-  const todo = tasks.filter(t => t.status === "todo")
-  const inProgress = tasks.filter(t => t.status === "in_progress")
-  const done = tasks.filter(t => t.status === "done")
+
+  const matchesSearch = (task) => {
+  if (!search) return true
+
+  return (
+    task.title
+      .toLowerCase()
+      .includes(search.toLowerCase()) ||
+
+    task.description
+      ?.toLowerCase()
+      .includes(search.toLowerCase())
+  )
+}
+  const todo = tasks.filter(t => t.status === "todo" && matchesSearch(t, search))
+  const inProgress = tasks.filter(t => t.status === "in_progress" && matchesSearch(t, search))
+  const done = tasks.filter(t => t.status === "done" && matchesSearch(t, search))
+
+  const visibleTasks =
+  tasks.filter(matchesSearch)
+
+  if (
+    search &&
+    visibleTasks.length === 0
+  ) {
+    return (
+      <div className="text-center py-10">
+        No tasks match your search.
+      </div>
+    )
+  }
 
   const handleDragEnd = (event) => {
     const { active, over } = event
@@ -32,6 +63,7 @@ export default function KanbanBoard({
           tasks={todo}
           onUpdate={onUpdate}
           onDelete={onDelete}
+          onEdit={onEdit}
         />
 
         <KanbanColumn
@@ -40,6 +72,7 @@ export default function KanbanBoard({
           tasks={inProgress}  
           onUpdate={onUpdate}
           onDelete={onDelete}
+          onEdit={onEdit}
         />
 
         <KanbanColumn
@@ -47,7 +80,8 @@ export default function KanbanBoard({
           title="Done"
           tasks={done}
           onUpdate={onUpdate}
-          onDelete={onDelete}
+          onDelete={onDelete} 
+          onEdit={onEdit}
         />
       </div>
     </DndContextWrapper>

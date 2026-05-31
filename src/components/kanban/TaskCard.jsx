@@ -1,5 +1,7 @@
 import { useDraggable } from "@dnd-kit/core"
 import { CSS } from "@dnd-kit/utilities"
+import { motion } from "framer-motion"
+import { toast, Toaster } from "sonner"
 
 export default function TaskCard({
   task,
@@ -15,15 +17,33 @@ export default function TaskCard({
     transform: CSS.Transform.toString(transform),
   }
 
+  const overdue = task.dueDate && new Date(task.dueDate) < new Date()
+
+  
+
   return (
-    <div
+    <motion.div
       ref={setNodeRef}
-      style={style}
-      {...listeners}
-      {...attributes}
-      className="bg-slate-800 p-4 rounded-xl border border-slate-700 hover:border-slate-600 transition cursor-grab active:cursor-grabbing"
+      style={{
+        transform: CSS.Transform.toString(transform),
+      }}
+      className="bg-slate-800 p-4 rounded-xl border border-slate-700 hover:border-slate-600 relative"
     >
+          {
+        overdue && (
+          <span className="absolute top-2 right-2 text-xs bg-red-600 text-white px-1 rounded">
+            Overdue
+          </span>
+      )}
+      
       <h3 className="font-medium">
+        <div
+          {...listeners}
+          {...attributes}
+          className="cursor-grab active:cursor-grabbing text-xs text-slate-500 mb-2"
+        >
+          ⋮⋮ Drag
+        </div>
         {task.title}
       </h3>
 
@@ -43,8 +63,7 @@ export default function TaskCard({
         <button
           onClick={(e) => {
             e.stopPropagation()
-            onEdit(task.id, task)
-            toast.success("Task updated")
+            onEdit(task)
           }}
           className="text-sm bg-slate-700 hover:bg-slate-600 px-3 py-1 rounded"
         >
@@ -61,7 +80,8 @@ export default function TaskCard({
         >
           Delete
         </button>
+        
       </div>
-    </div>
+    </motion.div>
   )
 }
