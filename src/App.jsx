@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { supabase } from './services/supabase'
+import { Toaster } from "sonner"
 
 function App() {
   useEffect(() => {

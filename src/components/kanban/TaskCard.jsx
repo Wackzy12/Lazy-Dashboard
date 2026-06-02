@@ -1,33 +1,65 @@
 import { useDraggable } from "@dnd-kit/core"
 import { CSS } from "@dnd-kit/utilities"
 import { motion } from "framer-motion"
-import { toast, Toaster } from "sonner"
+import PriorityBadge from "../ui/PriorityBadge"
+import { toast } from "sonner"
 
 export default function TaskCard({
   task,
   onEdit,
   onDelete
 }) {
-  const { attributes, listeners, setNodeRef, transform } =
+  const { attributes, listeners, setNodeRef, transform, isDragging } =
     useDraggable({
       id: task.id,
     })
 
   const style = {
-    transform: CSS.Transform.toString(transform),
+    transform: transform
+      ? `translate3d(${transform.x}px, ${transform.y}px, 0)`
+      : undefined,
+    opacity: isDragging ? 0.5 : 1,
   }
 
-  const overdue = task.dueDate && new Date(task.dueDate) < new Date()
-
-  
+  const overdue =
+  task.status !== "done" &&
+  task.due_date &&
+  new Date(task.due_date).setHours(
+    23,
+    59,
+    59,
+    999
+  ) < Date.now()
 
   return (
     <motion.div
       ref={setNodeRef}
-      style={{
-        transform: CSS.Transform.toString(transform),
+      style={style}
+      initial={{
+      opacity: 0,
       }}
-      className="bg-slate-800 p-4 rounded-xl border border-slate-700 hover:border-slate-600 relative"
+      animate={{
+        opacity: 1,
+      }}
+      transition={{
+        duration: 0.25,
+      }}
+      className={`
+        w-full
+        bg-slate-800
+        p-4
+        rounded-xl
+        border
+        border-slate-700
+        hover:border-slate-600
+        relative
+        transition-all
+        ${
+          isDragging
+            ? "shadow-2xl z-50"
+            : ""
+        }
+      `}
     >
           {
         overdue && (
@@ -40,9 +72,18 @@ export default function TaskCard({
         <div
           {...listeners}
           {...attributes}
-          className="cursor-grab active:cursor-grabbing text-xs text-slate-500 mb-2"
+          className="
+            flex items-center
+            gap-2
+            text-xs
+            text-slate-500
+            cursor-grab
+            active:cursor-grabbing
+            mb-2
+          "
         >
-          ⋮⋮ Drag
+          <span>⋮⋮</span>
+          <span>Move Task</span>
         </div>
         {task.title}
       </h3>
@@ -53,9 +94,15 @@ export default function TaskCard({
         </p>
       )}
 
-      <div className="flex justify-between mt-3 text-xs text-slate-400">
-        <span>{task.priority}</span>
-        <span>{task.status}</span>
+      {task.due_date && (
+        <p className="text-sm text-slate-400 mt-1">
+          Due:{" "}
+          {new Date(task.due_date).toLocaleDateString()}
+        </p>
+      )}
+
+      <div className="flex justify-between items-center mt-3">
+        <PriorityBadge priority={task.priority} />
       </div>
 
       {/* ACTION BUTTONS */}
