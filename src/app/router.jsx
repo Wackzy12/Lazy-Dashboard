@@ -9,6 +9,10 @@ import Dashboard from "../pages/Dashboard"
 
 import ProtectedRoute from "../components/ProtectedRoute"
 
+import TasksPage from "../pages/TasksPage"
+import PomodoroPage from "../pages/PomodoroPage"
+import Settings from "../pages/Settings"
+
 export const router = createBrowserRouter([
   {
     element: (
@@ -22,6 +26,18 @@ export const router = createBrowserRouter([
         path: "/",
         element: <Dashboard />,
       },
+      {
+        path: "tasks",
+        element: <TasksPage />,
+      },
+      {
+        path: "pomodoro",
+        element: <PomodoroPage />,
+      },
+      {
+        path: "settings",
+        element: <Settings />,
+      }
     ],
   },
 

@@ -5,7 +5,6 @@ import { useTasks } from "../features/tasks/hooks"
 import { toast, Toaster } from "sonner"
 import { getTaskStats } from "../features/analytics/utils"
 import StatsCards from "../components/analytics/StatsCards"
-import Pomodoro from "../components/pomodoro/Pomodoro"
 import SkeletonCard from "../components/ui/SkeletonCard"
 import ProductivityRing from "../components/analytics/ProductivityRing"
 import SearchBar from "../components/filters/SearchBar"
@@ -106,9 +105,6 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <Pomodoro />
-
-    
       {/* Create Task Modal */}
       <TaskModal
         initialValues={selectedTask}

@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { supabase } from "../services/supabase"
 import { useNavigate, Link } from "react-router-dom"
+import { toast } from "sonner"
 
 export default function Register() {
   const navigate = useNavigate()
@@ -27,6 +28,8 @@ export default function Register() {
       setError(error.message)
       return
     }
+
+    toast.success("Registration successful!")
 
     navigate("/login")
   }

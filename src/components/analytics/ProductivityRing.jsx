@@ -35,14 +35,22 @@ export default function ProductivityRing({
 
         {/* Progress Circle */}
         <motion.circle
-        initial={{
-            strokeDashoffset: circumference,
-        }}
+        stroke="#3b82f6"
+        fill="transparent"
+        strokeWidth={stroke}
+        strokeDasharray={circumference}
+        strokeDashoffset={circumference}
+        r={normalizedRadius}
+        cx={radius}
+        cy={radius}
+        strokeLinecap="round"
+        transform={`rotate(-90 ${radius} ${radius})`}
         animate={{
-            strokeDashoffset,
+          strokeDashoffset,
         }}
         transition={{
-            duration: 1,
+          duration: 1,
+          ease: "easeOut",
         }}
         />
       </svg>
