@@ -38,6 +38,7 @@ export function useTasks() {
     const { data } = await createTask({
       ...task,
       user_id: user.id,
+      completed_at: null,
     })
 
     setTasks((prev) => [data[0], ...prev])
@@ -45,11 +46,35 @@ export function useTasks() {
 
   // UPDATE
   const editTask = async (id, updates) => {
-    await updateTask(id, updates)
+    const task = tasks.find((t) => t.id === id)
+
+    let updatedData = { ...updates }
+
+    // Task moved into Done
+    if (
+      updates.status === "done" &&
+      task?.status !== "done"
+    ) {
+      updatedData.completed_at =
+        new Date().toISOString()
+    }
+
+    // Task moved out of Done
+    if (
+      task?.status === "done" &&
+      updates.status &&
+      updates.status !== "done"
+    ) {
+      updatedData.completed_at = null
+    }
+
+    await updateTask(id, updatedData)
 
     setTasks((prev) =>
       prev.map((t) =>
-        t.id === id ? { ...t, ...updates } : t
+        t.id === id
+          ? { ...t, ...updatedData }
+          : t
       )
     )
   }

@@ -19,8 +19,8 @@ export default function StatsCards({
       />
 
       <Card
-        title="Productivity"
-        value={`${stats.productivity}%`}
+        title="Overdue"
+        value={stats.overdue}
       />
     </div>
   )

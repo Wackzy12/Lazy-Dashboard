@@ -2,6 +2,7 @@ import { motion } from "framer-motion"
 
 export default function ProductivityRing({
   percentage,
+  averageCompletionTime,
 }) {
   const radius = 70
   const stroke = 10
@@ -63,6 +64,16 @@ export default function ProductivityRing({
         <p className="text-slate-400 text-sm">
           Productivity Score
         </p>
+
+        <div className="mt-6 pt-4 border-t border-slate-800">
+          <p className="text-slate-400 text-sm">
+            Avg Completion Time
+          </p>
+
+          <h3 className="text-xl font-semibold mt-1">
+            {averageCompletionTime || 0} Days
+          </h3>
+          </div>
       </div>
     </div>
   )

@@ -9,6 +9,8 @@ import SkeletonCard from "../components/ui/SkeletonCard"
 import ProductivityRing from "../components/analytics/ProductivityRing"
 import SearchBar from "../components/filters/SearchBar"
 import TaskFilter from "../components/filters/TaskFilter"
+import { getAverageCompletionTime } from "../features/analytics/utils"
+
 
 export default function Dashboard() {
   const {
@@ -32,6 +34,8 @@ export default function Dashboard() {
 
   const [filter, setFilter] = useState("all")
   const [search, setSearch] = useState("")
+
+  const averageCompletionTime = getAverageCompletionTime(tasks)
 
    const filteredTasks =
     filter === "all"
@@ -101,6 +105,7 @@ export default function Dashboard() {
         <div>
           <ProductivityRing
             percentage={stats.productivity}
+            averageCompletionTime={averageCompletionTime}
           />
         </div>
       </div>

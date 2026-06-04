@@ -17,9 +17,9 @@ export default function KanbanColumn({
   return (
     <div
       ref={setNodeRef}
-      className="bg-slate-900 rounded-2xl p-4 border border-slate-800 min-h-100"
+      className="bg-slate-900 rounded-2xl p-4 border border-slate-800 min-h-100 flex flex-col h-[58vh]"
     >
-      <h2 className="font-semibold mb-4">
+      <h2 className="sticky top-0 bg-slate-900 font-semibold mb-4">
         {title}
       </h2>
       
@@ -39,7 +39,7 @@ export default function KanbanColumn({
         </div>
       )}
 
-      <div className="space-y-3">
+      <div className="flex-1 overflow-y-auto p-3 space-y-3">
         {tasks.map((task) => (
           <TaskCard 
           key={task.id} 
