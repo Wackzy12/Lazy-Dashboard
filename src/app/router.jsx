@@ -9,7 +9,7 @@ import Dashboard from "../pages/Dashboard"
 
 import ProtectedRoute from "../components/ProtectedRoute"
 
-import TasksPage from "../pages/TasksPage"
+import Customization from "../pages/Customization"
 import PomodoroPage from "../pages/PomodoroPage"
 import Settings from "../pages/Settings"
 
@@ -27,8 +27,8 @@ export const router = createBrowserRouter([
         element: <Dashboard />,
       },
       {
-        path: "tasks",
-        element: <TasksPage />,
+        path: "customization",
+        element: <Customization />,
       },
       {
         path: "pomodoro",

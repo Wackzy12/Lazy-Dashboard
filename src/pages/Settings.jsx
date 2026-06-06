@@ -39,7 +39,7 @@ export default function Settings() {
   return (
     <div className="max-w-3xl space-y-6">
       <h1 className="text-3xl font-bold">
-        Settings
+        Profile Settings
       </h1>
 
       {/* Profile Section */}
@@ -48,9 +48,6 @@ export default function Settings() {
         name={name}
         setName={setName}
       />
-
-      {/* Preferences */}
-      <Preferences />
 
       {/* Danger Zone */}
       <DangerZone />
@@ -134,37 +131,5 @@ function ProfileSection({
   )
 }
 
-function Preferences() {
-  const [darkMode, setDarkMode] = useState(true)
 
-  return (
-    <div className="bg-slate-900 border border-slate-800 rounded-xl p-6 space-y-4">
-      <h2 className="text-xl font-semibold">
-        Preferences
-      </h2>
-
-      {/* Theme Toggle */}
-      <div className="flex items-center justify-between">
-        <span className="text-slate-300">
-          Dark Mode
-        </span>
-
-        <button
-          onClick={() => setDarkMode(!darkMode)}
-          className={`px-3 py-1 rounded ${
-            darkMode
-              ? "bg-blue-600"
-              : "bg-slate-700"
-          }`}
-        >
-          {darkMode ? "On" : "Off"}
-        </button>
-      </div>
-
-      <p className="text-slate-500 text-sm">
-        More preferences coming soon.
-      </p>
-    </div>
-  )
-}
 

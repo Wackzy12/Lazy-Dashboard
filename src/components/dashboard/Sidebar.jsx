@@ -1,6 +1,6 @@
 import {
   LayoutDashboard,
-  KanbanSquare,
+  Paintbrush,
   Timer,
   Settings,
   LogOut,
@@ -8,6 +8,7 @@ import {
 
 import { supabase } from "../../services/supabase"
 import { NavLink, useNavigate } from "react-router-dom"
+import logo from "../../assets/lazyDashboard_logo.png"
 
 export default function Sidebar() {
   const navigate = useNavigate()
@@ -19,10 +20,12 @@ export default function Sidebar() {
 
   return (
     <aside className="w-64 bg-slate-900 border-r border-slate-800 hidden md:flex flex-col">
-      <div className="p-6 border-b border-slate-800">
-        <h1 className="text-2xl font-bold text-blue-400">
-          TaskFlow
-        </h1>
+      <div className="p-6 border-b border-slate-800 flex justify-around items-center h-24">
+        <img
+          src={logo}
+          alt="Lazy Dashboard"
+          className="h-25"
+        />
       </div>
 
       <nav className="flex-1 p-4 space-y-2">
@@ -33,9 +36,9 @@ export default function Sidebar() {
         />
 
         <SidebarItem
-          icon={<KanbanSquare size={18} />}
-          label="Tasks"
-          to="/tasks"
+          icon={<Paintbrush size={18} />}
+          label="Customization"
+          to="/customization"
         />
 
         <SidebarItem
@@ -46,7 +49,7 @@ export default function Sidebar() {
 
         <SidebarItem
           icon={<Settings size={18} />}
-          label="Settings"
+          label="Profile Settings"
           to="/settings"
         />
       </nav>

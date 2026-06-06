@@ -8,7 +8,7 @@ export default function Header() {
     <header className="h-20 border-b border-slate-800 px-6 flex items-center justify-between bg-slate-950">
       <div>
         <h2 className="text-2xl font-bold">
-          Dashboard
+          Lazy Dashboard
         </h2>
 
         <p className="text-slate-400 text-sm">
