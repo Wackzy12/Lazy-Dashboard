@@ -10,6 +10,8 @@ import ProductivityRing from "../components/analytics/ProductivityRing"
 import SearchBar from "../components/filters/SearchBar"
 import TaskFilter from "../components/filters/TaskFilter"
 import { getAverageCompletionTime } from "../features/analytics/utils"
+import { useTheme } from "../features/theme/ThemeContext"
+
 
 
 export default function Dashboard() {
@@ -20,6 +22,9 @@ export default function Dashboard() {
     editTask,
     removeTask,
   } = useTasks()
+
+  const { theme } = useTheme()
+  const isDark = theme === "dark"
 
   const [selectedTask, setSelectedTask] = useState(null)
 
@@ -67,13 +72,22 @@ export default function Dashboard() {
           </p>
         </div>
 
-        <button
+       <button
           onClick={() => setOpen(true)}
-          className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg font-medium transition"
+          className={`
+            px-4 py-2 rounded-lg font-medium transition-colors
+            ${
+              isDark
+                ? "bg-blue-600 hover:bg-blue-700 text-white"
+                : "bg-blue-600 hover:bg-blue-700 text-white shadow-sm"
+            }
+          `}
         >
           + New Task
         </button>
       </div>
+
+      
       
       <StatsCards stats={stats} />
 

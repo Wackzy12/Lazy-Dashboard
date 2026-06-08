@@ -3,7 +3,7 @@ import { supabase } from "../services/supabase"
 import { useAuth } from "../hooks/useAuth.js"
 import { useEffect } from "react"
 import DangerZone from "../components/settingsPages/DangerZone"
-
+import { useTheme } from "../features/theme/ThemeContext"
 import { toast } from "sonner"
 
 export default function Settings() {
@@ -30,7 +30,7 @@ export default function Settings() {
 
   if (loading) {
     return (
-      <div className="text-slate-400">
+      <div className="text-slate-500 dark:text-slate-400">
         Loading settings...
       </div>
     )
@@ -62,6 +62,9 @@ function ProfileSection({
 }) {
   const [saving, setSaving] = useState(false)
 
+  const { theme } = useTheme()
+  const isDark = theme === "dark"
+
   const updateProfile = async () => {
     setSaving(true)
 
@@ -82,31 +85,62 @@ function ProfileSection({
   }
 
   return (
-    <div className="bg-slate-900 border border-slate-800 rounded-xl p-6 space-y-4">
-      <h2 className="text-xl font-semibold">
+    <div
+      className={`
+        rounded-xl p-6 space-y-4 border transition-colors
+        ${
+          isDark
+            ? "bg-slate-900 border-slate-800"
+            : "bg-white border-slate-200 shadow-sm"
+        }
+      `}
+    >
+      <h2
+        className={`text-xl font-semibold ${
+          isDark
+            ? "text-white"
+            : "text-slate-900"
+        }`}
+      >
         Profile
       </h2>
 
-      {/* Avatar */}
       <div className="flex items-center gap-4">
         <div className="w-14 h-14 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold">
           {user?.email?.charAt(0).toUpperCase()}
         </div>
 
         <div>
-          <p className="text-slate-300">
+          <p
+            className={
+              isDark
+                ? "text-slate-300"
+                : "text-slate-800"
+            }
+          >
             {user?.email}
           </p>
 
-          <p className="text-slate-500 text-sm">
+          <p
+            className={
+              isDark
+                ? "text-slate-500 text-sm"
+                : "text-slate-500 text-sm"
+            }
+          >
             User Account
           </p>
         </div>
       </div>
 
-      {/* Name input */}
       <div>
-        <label className="text-sm text-slate-400">
+        <label
+          className={
+            isDark
+              ? "text-sm text-slate-400"
+              : "text-sm text-slate-600"
+          }
+        >
           Display Name
         </label>
 
@@ -115,21 +149,35 @@ function ProfileSection({
           onChange={(e) =>
             setName(e.target.value)
           }
-          className="w-full mt-2 p-3 rounded bg-slate-800 border border-slate-700"
           placeholder="Enter your name"
+          className={`
+            w-full mt-2 p-3 rounded-lg border transition-colors
+            ${
+              isDark
+                ? "bg-slate-800 border-slate-700 text-white"
+                : "bg-white border-slate-200 text-slate-900"
+            }
+          `}
         />
       </div>
 
       <button
         onClick={updateProfile}
         disabled={saving}
-        className="bg-blue-600 px-4 py-2 rounded disabled:opacity-50"
+        className="
+          bg-blue-600
+          hover:bg-blue-700
+          text-white
+          px-4
+          py-2
+          rounded-lg
+          transition
+          disabled:opacity-50
+        "
       >
         {saving ? "Saving..." : "Save Changes"}
       </button>
     </div>
   )
 }
-
-
 

@@ -1,9 +1,13 @@
 import { useState } from "react"
 import { supabase } from "../../services/supabase"
 import { toast } from "sonner"
+import { useTheme } from "../../features/theme/ThemeContext"
 
 export default function DangerZone() {
   const [loading, setLoading] = useState(false)
+
+  const { theme } = useTheme()
+  const isDark = theme === "dark"
 
   const deleteAccount = async () => {
     const confirmDelete = window.confirm(
@@ -15,7 +19,6 @@ export default function DangerZone() {
     setLoading(true)
 
     try {
-      // 1. Get current user
       const {
         data: { user },
       } = await supabase.auth.getUser()
@@ -24,7 +27,6 @@ export default function DangerZone() {
 
       const userId = user.id
 
-      // 2. Delete user tasks first (IMPORTANT)
       const { error: taskError } = await supabase
         .from("tasks")
         .delete()
@@ -32,20 +34,15 @@ export default function DangerZone() {
 
       if (taskError) throw taskError
 
-      // 3. Delete auth user
       const { error: authError } =
-        await supabase.auth.admin.deleteUser(
-          userId
-        )
+        await supabase.auth.admin.deleteUser(userId)
 
       if (authError) throw authError
 
       toast.success("Account deleted successfully")
 
-      // 4. Force logout
       await supabase.auth.signOut()
 
-      // 5. Redirect to login
       window.location.href = "/login"
     } catch (error) {
       console.error(error)
@@ -56,19 +53,52 @@ export default function DangerZone() {
   }
 
   return (
-    <div className="bg-red-950/20 border border-red-900 rounded-xl p-6 space-y-4">
-      <h2 className="text-xl font-semibold text-red-400">
+    <div
+      className={`
+        rounded-xl p-6 space-y-4 border transition-colors
+        ${
+          isDark
+            ? "bg-red-950/20 border-red-900"
+            : "bg-red-50 border-red-200"
+        }
+      `}
+    >
+      <h2
+        className={`
+          text-xl font-semibold
+          ${
+            isDark
+              ? "text-red-400"
+              : "text-red-600"
+          }
+        `}
+      >
         Danger Zone
       </h2>
 
-      <p className="text-slate-400 text-sm">
+      <p
+        className={
+          isDark
+            ? "text-slate-400 text-sm"
+            : "text-slate-600 text-sm"
+        }
+      >
         These actions are irreversible.
       </p>
 
       <button
         onClick={deleteAccount}
         disabled={loading}
-        className="bg-red-600 px-4 py-2 rounded disabled:opacity-50"
+        className="
+          bg-red-600
+          hover:bg-red-700
+          text-white
+          px-4
+          py-2
+          rounded-lg
+          transition
+          disabled:opacity-50
+        "
       >
         {loading ? "Deleting..." : "Delete Account"}
       </button>

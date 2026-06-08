@@ -3,12 +3,15 @@ import { CSS } from "@dnd-kit/utilities"
 import { motion } from "framer-motion"
 import PriorityBadge from "../ui/PriorityBadge"
 import { toast } from "sonner"
+import { useTheme } from "../../features/theme/ThemeContext"
 
 export default function TaskCard({
   task,
   onEdit,
   onDelete
 }) {
+  const { theme } = useTheme()
+  const isDark = theme === "dark"
   const { attributes, listeners, setNodeRef, transform, isDragging } =
     useDraggable({
       id: task.id,
@@ -46,18 +49,20 @@ export default function TaskCard({
       }}
       className={`
         w-full
-        bg-slate-800
         p-4
         rounded-xl
         border
-        border-slate-700
-        hover:border-slate-600
         relative
         transition-all
         ${
           isDragging
             ? "shadow-2xl z-50"
             : ""
+        }
+        ${
+          isDark
+            ? "bg-slate-800 border-slate-700 hover:border-slate-600"
+            : "bg-slate-50 border-slate-200 hover:border-slate-300"
         }
       `}
     >
@@ -68,19 +73,29 @@ export default function TaskCard({
           </span>
       )}
       
-      <h3 className="font-medium">
+      <h3
+  className={`font-medium ${
+      isDark
+        ? "text-white"
+        : "text-slate-900"
+    }`}
+  >
         <div
           {...listeners}
           {...attributes}
-          className="
+          className={`
             flex items-center
             gap-2
             text-xs
-            text-slate-500
             cursor-grab
             active:cursor-grabbing
             mb-2
-          "
+            ${
+              isDark
+                ? "text-slate-500"
+                : "text-slate-400"
+            }
+          `}
         >
           <span>⋮⋮</span>
           <span>Move Task</span>
@@ -89,13 +104,21 @@ export default function TaskCard({
       </h3>
 
       {task.description && (
-        <p className="text-sm text-slate-400 mt-1">
+        <p className={`text-sm mt-1 ${
+          isDark
+            ? "text-slate-400"
+            : "text-slate-500"
+        }`}>
           {task.description}
         </p>
       )}
 
       {task.due_date && (
-        <p className="text-sm text-slate-400 mt-1">
+        <p className={`text-sm mt-1 ${
+          isDark
+            ? "text-slate-400"
+            : "text-slate-500"
+        }`}>
           Due:{" "}
           {new Date(task.due_date).toLocaleDateString()}
         </p>
@@ -112,7 +135,11 @@ export default function TaskCard({
             e.stopPropagation()
             onEdit(task)
           }}
-          className="text-sm bg-slate-700 hover:bg-slate-600 px-3 py-1 rounded"
+          className={`text-sm px-3 py-1 rounded ${
+            isDark
+              ? "bg-slate-700 hover:bg-slate-600"
+              : "bg-slate-200 hover:bg-slate-300"
+          }`}
         >
           Edit
         </button>
