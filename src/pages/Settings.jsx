@@ -42,14 +42,14 @@ export default function Settings() {
         Profile Settings
       </h1>
 
-      {/* Profile Section */}
       <ProfileSection
         user={user}
         name={name}
         setName={setName}
       />
 
-      {/* Danger Zone */}
+      <PasswordSection />
+
       <DangerZone />
     </div>
   )
@@ -66,22 +66,28 @@ function ProfileSection({
   const isDark = theme === "dark"
 
   const updateProfile = async () => {
-    setSaving(true)
+    try {
+      setSaving(true)
 
-    const { error } =
-      await supabase.auth.updateUser({
-        data: {
-          name,
-        },
-      })
+      const { error } =
+        await supabase.auth.updateUser({
+          data: {
+            name,
+          },
+        })
 
-    if (error) {
-      toast.error("Failed to update profile")
-    } else {
+      if (error) {
+        toast.error("Failed to update profile")
+        return
+      }
+
       toast.success("Profile updated")
+    } catch (err) {
+      console.error(err)
+      toast.error("Something went wrong")
+    } finally {
+      setSaving(false)
     }
-
-    setSaving(false)
   }
 
   return (
@@ -176,6 +182,132 @@ function ProfileSection({
         "
       >
         {saving ? "Saving..." : "Save Changes"}
+      </button>
+    </div>
+  )
+}
+
+function PasswordSection() {
+  const { theme } = useTheme()
+  const isDark = theme === "dark"
+
+  const [password, setPassword] =
+    useState("")
+
+  const [confirmPassword, setConfirmPassword] =
+    useState("")
+
+  const [saving, setSaving] =
+    useState(false)
+
+  const updatePassword = async () => {
+    if (password.length < 6) {
+      toast.error(
+        "Password must be at least 6 characters"
+      )
+      return
+    }
+
+    if (password !== confirmPassword) {
+      toast.error(
+        "Passwords do not match"
+      )
+      return
+    }
+
+    setSaving(true)
+
+    const { error } =
+      await supabase.auth.updateUser({
+        password,
+      })
+
+    if (error) {
+      toast.error(
+        "Failed to update password"
+      )
+    } else {
+      toast.success(
+        "Password updated successfully"
+      )
+
+      setPassword("")
+      setConfirmPassword("")
+    }
+
+    setSaving(false)
+  }
+
+  return (
+    <div
+      className={`
+        rounded-xl p-6 space-y-4 border
+        ${
+          isDark
+            ? "bg-slate-900 border-slate-800"
+            : "bg-white border-slate-200 shadow-sm"
+        }
+      `}
+    >
+      <h2
+        className={`text-xl font-semibold ${
+          isDark
+            ? "text-white"
+            : "text-slate-900"
+        }`}
+      >
+        Change Password
+      </h2>
+
+      <input
+        type="password"
+        placeholder="New password"
+        value={password}
+        onChange={(e) =>
+          setPassword(e.target.value)
+        }
+        className={`
+          w-full p-3 rounded-lg border
+          ${
+            isDark
+              ? "bg-slate-800 border-slate-700 text-white"
+              : "bg-white border-slate-200 text-slate-900"
+          }
+        `}
+      />
+
+      <input
+        type="password"
+        placeholder="Confirm password"
+        value={confirmPassword}
+        onChange={(e) =>
+          setConfirmPassword(e.target.value)
+        }
+        className={`
+          w-full p-3 rounded-lg border
+          ${
+            isDark
+              ? "bg-slate-800 border-slate-700 text-white"
+              : "bg-white border-slate-200 text-slate-900"
+          }
+        `}
+      />
+
+      <button
+        onClick={updatePassword}
+        disabled={saving}
+        className="
+          bg-blue-600
+          hover:bg-blue-700
+          text-white
+          px-4
+          py-2
+          rounded-lg
+        "
+      >
+        {saving
+          ? "Updating..."
+          : "Update Password"}
       </button>
     </div>
   )

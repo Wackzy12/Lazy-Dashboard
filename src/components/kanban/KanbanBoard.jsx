@@ -1,5 +1,6 @@
 import KanbanColumn from "./KanbanColumn"
 import DndContextWrapper from "./DndContextWrapper"
+import { usePreferences } from "../../features/preferences/usePreferences"
 
 export default function KanbanBoard({
   tasks,
@@ -9,6 +10,7 @@ export default function KanbanBoard({
   filter,
   search,
 }) {
+
 
   const matchesSearch = (task) => {
   if (!search) return true
@@ -23,9 +25,54 @@ export default function KanbanBoard({
       .includes(search.toLowerCase())
   )
 }
-  const todo = tasks.filter(t => t.status === "todo" && matchesSearch(t, search))
-  const inProgress = tasks.filter(t => t.status === "in_progress" && matchesSearch(t, search))
-  const done = tasks.filter(t => t.status === "done" && matchesSearch(t, search))
+
+  const { autoSort } = usePreferences()
+
+  const sortTasks = (tasks) => {
+  const priorityOrder = {
+      urgent: 1,
+      high: 2,
+      medium: 3,
+      low: 4,
+    }
+
+    return [...tasks].sort(
+      (a, b) =>
+        priorityOrder[a.priority] -
+        priorityOrder[b.priority]
+    )
+  }
+
+  const todo = autoSort
+    ? sortTasks(
+        tasks.filter(
+          t => t.status === "todo"
+        )
+      )
+    : tasks.filter(
+        t => t.status === "todo"
+      )
+
+  const inProgress = autoSort
+    ? sortTasks(
+        tasks.filter(
+          t => t.status === "in_progress"
+        )
+      )
+    : tasks.filter(
+        t => t.status === "in_progress"
+      )
+
+  const done = autoSort
+    ? sortTasks(
+        tasks.filter(
+          t => t.status === "done"
+        )
+      )
+    : tasks.filter(
+        t => t.status === "done"
+      )
+
 
   const visibleTasks =
   tasks.filter(matchesSearch)

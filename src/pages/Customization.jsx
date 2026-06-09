@@ -6,8 +6,6 @@ import Preferences from "../components/customization/Preferences"
 
 export default function Customization() {
   const [settings, setSettings] = useState({
-    compactMode: false,
-    animations: true,
     autoSort: false,
   })
 

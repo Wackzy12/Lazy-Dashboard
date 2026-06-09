@@ -5,7 +5,15 @@ export default function Pomodoro() {
   const { theme } = useTheme()
   const isDark = theme === "dark"
 
-  const [time, setTime] = useState(25 * 60)
+  const MODES = {
+    focus: 25 * 60,
+    short: 5 * 60,
+    long: 15 * 60,
+  }
+
+const [mode, setMode] = useState("focus")
+const [time, setTime] = useState(MODES.focus)
+
   const [running, setRunning] = useState(false)
 
   useEffect(() => {
@@ -49,6 +57,53 @@ export default function Pomodoro() {
         Pomodoro Timer
       </h2>
 
+      <div className="flex justify-center gap-2 mb-6">
+        <button
+          onClick={() => {
+            setMode("focus")
+            setTime(MODES.focus)
+            setRunning(false)
+          }}
+          className={`px-3 py-2 rounded-lg ${
+            mode === "focus"
+              ? "bg-blue-600 text-white"
+              : "bg-slate-200 dark:bg-slate-800"
+          }`}
+        >
+          Focus
+        </button>
+
+        <button
+          onClick={() => {
+            setMode("short")
+            setTime(MODES.short)
+            setRunning(false)
+          }}
+          className={`px-3 py-2 rounded-lg ${
+            mode === "short"
+              ? "bg-green-600 text-white"
+              : "bg-slate-200 dark:bg-slate-800"
+          }`}
+        >
+          Short Break
+        </button>
+
+        <button
+          onClick={() => {
+            setMode("long")
+            setTime(MODES.long)
+            setRunning(false)
+          }}
+          className={`px-3 py-2 rounded-lg ${
+            mode === "long"
+              ? "bg-purple-600 text-white"
+              : "bg-slate-200 dark:bg-slate-800"
+          }`}
+        >
+          Long Break
+        </button>
+      </div>
+
       <div
         className={`text-5xl font-bold mb-6 ${
           isDark
@@ -78,7 +133,7 @@ export default function Pomodoro() {
 
         <button
           onClick={() => {
-            setTime(25 * 60)
+            setTime(MODES[mode])
             setRunning(false)
           }}
           className={`

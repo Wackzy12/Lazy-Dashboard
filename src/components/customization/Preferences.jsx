@@ -78,22 +78,6 @@ export default function Preferences({
       </h2>
 
       <Toggle
-        label="Compact Mode"
-        value={settings.compactMode}
-        onChange={() =>
-          toggleSetting("compactMode")
-        }
-      />
-
-      <Toggle
-        label="Enable Animations"
-        value={settings.animations}
-        onChange={() =>
-          toggleSetting("animations")
-        }
-      />
-
-      <Toggle
         label="Auto Sort Tasks"
         value={settings.autoSort}
         onChange={() =>

@@ -48,11 +48,27 @@ export default function Header() {
 
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center font-bold text-white">
-            {user?.email?.[0]?.toUpperCase()}
+            {
+              (
+                user?.user_metadata?.name?.[0] ||
+                user?.email?.[0]
+              )?.toUpperCase()
+            }
           </div>
 
           <div className="hidden sm:block">
             <p className="text-sm font-medium">
+              {user?.user_metadata?.name ||
+                " "}
+            </p>
+
+            <p
+              className={
+                isDark
+                  ? "text-xs text-slate-400"
+                  : "text-xs text-slate-500"
+              }
+            >
               {user?.email}
             </p>
           </div>
